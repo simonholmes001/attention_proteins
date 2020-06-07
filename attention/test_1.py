@@ -8,7 +8,7 @@ shuffle_dataset = True
 
 batch = BatchData(input_path, batch_size, n_workers, validation_split, shuffle_dataset)
 batch.dataset()
-x,y = batch.batch_data()
+test,validate = batch.batch_data()
 
 # print('=' * 83)
 # dataiter = iter(x)

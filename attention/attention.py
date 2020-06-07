@@ -2,7 +2,7 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+from batch_data import BatchData
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 emsize = 200 # embedding dimension
@@ -29,12 +29,31 @@ lr = 5.0 # learning rate
 optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.95)
 
+input_path = '/home/simon/mathisi2/attention_proteins/data'
+batch_size = 1
+n_workers = 1
+validation_split = 0.2
+shuffle_dataset = True
+
+batch = BatchData(input_path, batch_size, n_workers, validation_split, shuffle_dataset)
+batch.dataset()
+train_data,validation_data = batch.batch_data()
+
+
+# num_epochs = 10
+# total_samples = len(dataset)
+# n_iterations = math.ceil(total_samples / batch_size)
+# print(total_samples, n_iterations)
+#
+# for epoch in range(num_epochs):
+#     for i, (inputs, labels) in enumerate(dataloader):
+#         print(f"epoch {epoch+1}/{num_epochs}, step {i+1}/{n_iterations}, inputs {labels.shape}")
+
 import time
 def train():
     model.train() # Turn on the train mode
     total_loss = 0.
     start_time = time.time()
-    ntokens = len(TEXT.vocab.stoi)
     for batch, i in enumerate(range(0, train_data.size(0) - 1, bptt)):
         data, targets = get_batch(train_data, i)
         optimizer.zero_grad()
@@ -70,7 +89,25 @@ def evaluate(eval_model, data_source):
             total_loss += len(data) * criterion(output_flat, targets).item()
     return total_loss / (len(data_source) - 1)
 
+best_val_loss = float("inf")
+epochs = 3 # The number of epochs
+best_model = None
 
+for epoch in range(1, epochs + 1):
+    epoch_start_time = time.time()
+    train()
+    val_loss = evaluate(model, val_data)
+    print('-' * 89)
+    print('| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
+          'valid ppl {:8.2f}'.format(epoch, (time.time() - epoch_start_time),
+                                     val_loss, math.exp(val_loss)))
+    print('-' * 89)
+
+    if val_loss < best_val_loss:
+        best_val_loss = val_loss
+        best_model = model
+
+    scheduler.step()
 
 
 # num_epochs = 10
