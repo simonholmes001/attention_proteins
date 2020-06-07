@@ -10,13 +10,13 @@ batch = BatchData(input_path, batch_size, n_workers, validation_split, shuffle_d
 batch.dataset()
 x,y = batch.batch_data()
 
-print('=' * 83)
-dataiter = iter(x)
-data = dataiter.next()
-features, labels = data
-print(f"features: \n{features}\n"
-      f"labels: \n{labels}\n"
-      f"len features: {len(features)}\n"
-      f"len labels: {len(labels)}\n")
-print('=' * 83)
+# print('=' * 83)
+# dataiter = iter(x)
+# data = dataiter.next()
+# features, labels = data
+# print(f"features: \n{features}\n"
+#       f"labels: \n{labels}\n"
+#       f"len features: {len(features)}\n"
+#       f"len labels: {len(labels)}\n")
+# print('=' * 83)
 
