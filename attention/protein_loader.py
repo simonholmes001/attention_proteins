@@ -3,7 +3,6 @@ import os
 import torch
 from torch.utils.data import Dataset, DataLoader
 import pickle
-import math
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -62,6 +61,8 @@ class ProteinLoader(Dataset):
         """
         return "_".join(file.split("_")[:-1]) + "_"
 
+"""
+
 dataset = ProteinLoader('/home/the_beast/mathisi/simon/attention/data')
 
 # Print to test outputs
@@ -101,3 +102,4 @@ for epoch in range(num_epochs):
         # print(f"{i}")
         # forward pass, backward pass, update weights
         print(f"epoch {epoch+1}/{num_epochs}, step {i+1}/{n_iterations}, inputs {labels.shape}")
+"""
