@@ -5,7 +5,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 from protein_loader import ProteinLoader
 
-x = ProteinLoader('/home/simon/mathisi2/attention_proteins/data')
+x = ProteinLoader('/media/the_beast/A/mathisi_tests/data/LSTM/data')
 dataset = x.get_all_data()
 N = 64
 n_workers = 5
